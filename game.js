@@ -157,6 +157,44 @@ function restartGame() {
     gameLoop = setInterval(gameStep, currentSpeed);
 }
 
+// 触摸控制
+let touchStartX = 0;
+let touchStartY = 0;
+
+document.addEventListener('touchstart', (event) => {
+    touchStartX = event.touches[0].clientX;
+    touchStartY = event.touches[0].clientY;
+});
+
+document.addEventListener('touchmove', (event) => {
+    event.preventDefault();
+});
+
+document.addEventListener('touchend', (event) => {
+    const touchEndX = event.changedTouches[0].clientX;
+    const touchEndY = event.changedTouches[0].clientY;
+    
+    const deltaX = touchEndX - touchStartX;
+    const deltaY = touchEndY - touchStartY;
+    
+    // 判断滑动方向
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+        // 水平滑动
+        if (deltaX > 0 && direction !== 'left') {
+            nextDirection = 'right';
+        } else if (deltaX < 0 && direction !== 'right') {
+            nextDirection = 'left';
+        }
+    } else {
+        // 垂直滑动
+        if (deltaY > 0 && direction !== 'up') {
+            nextDirection = 'down';
+        } else if (deltaY < 0 && direction !== 'down') {
+            nextDirection = 'up';
+        }
+    }
+});
+
 // 键盘控制
 document.addEventListener('keydown', (event) => {
     switch(event.key) {
